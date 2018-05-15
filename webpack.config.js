@@ -15,10 +15,11 @@ const extractSass = new ExtractTextPlugin({
 
 const config = {
     entry: {
-        main: './src/js/app.js'
+        main: './src/js/app.js',
+        styles: './src/js/styles.js'
     },
     output: {
-        filename: 'bundle.js',
+        filename: '[name].js',
         path: distPath
     },
     module: {
