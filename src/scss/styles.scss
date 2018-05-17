@@ -1,0 +1,47 @@
+*:focus {
+  outline: none;
+}
+body {
+  padding: 0;
+  margin: 0;
+  background: gainsboro;
+}
+.wrapper {
+  width: 800px;
+  margin: 0 auto;
+  padding: 150px 0;
+}
+.row {
+  display: flex;
+  margin: 0 -20px;
+}
+.col {
+  padding: 0 20px;
+}
+.col.md-3 {
+  flex-basis: 33.333333%;
+  box-sizing: border-box;
+}
+.input-group {
+}
+.input-group__label {
+  display: block;
+}
+.input-group__number {
+  display: block;
+  width: 100%;
+  background: transparent;
+  border: none;
+}
+.input-group__range {
+  display: block;
+  width: 100%;
+}
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type='number'] {
+  -moz-appearance:textfield;
+}

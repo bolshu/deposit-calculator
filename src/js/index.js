@@ -1,3 +1,5 @@
+require('../scss/styles.scss');
+
 'use strict'
 
 const cashNumber = document.getElementById('cash-number');
@@ -39,11 +41,66 @@ const inputValue = {
         if (this.value > 24) {
             this.value = 24;
         }
+    },
+    minValue : function () {
+        if (this.value.length >= 1) {
+            this.value = 0;
+            this.nextElementSibling.value = 0;
+        }
+    },
+    tempLimit : function (val, min, max) {
+        if (val < min) {
+            val = min;
+        } else if (val > max) {
+            val = max;
+        }
+        console.log(val, min, max)
     }
 };
 
+// эта функция с параметрами не работает
+function inputLimit(val, min, max) {
+    if (val < min) {
+        val  = min;
+        return val;
+    } else if (val > max) {
+        val = max;
+        return val;
+    }
+}
+
+const cashLimit = {
+    inputValue: cashNumber.value,
+    minValue: 30000,
+    maxValue: 500000,
+    inputLimit: inputLimit
+};
+
+const percentLimit = {
+    minValue: .01,
+    maxValue: 15,
+    inputLimit: inputLimit
+};
+
+const monthLimit = {
+    minValue: 3,
+    maxValue: 24,
+    inputLimit: inputLimit
+};
+
+// cashNumber.addEventListener('keyup', function(){
+//     let currentInputValue = this.value;
+//     inputValue.tempLimit(currentInputValue, 30000, 500000);
+//     console.log(inputValue.tempLimit, currentInputValue);
+// });
+
+// cashNumber.addEventListener('keyup', function () {
+//     inputValue.tempLimit(cashNumber.value, 30000, 500000);
+// });
+
 cashNumber.addEventListener('input', inputValue.numberHandler);
-cashNumber.addEventListener('keyup', inputValue.cashLimit);
+cashNumber.addEventListener('change', inputValue.cashLimit);
+cashNumber.addEventListener('keyup', inputValue.minValue);
 cashRange.addEventListener('input', inputValue.rangeHandler);
 
 percentNumber.addEventListener('input', inputValue.numberHandler);
