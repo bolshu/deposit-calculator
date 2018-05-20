@@ -4,7 +4,9 @@
 body {
   padding: 0;
   margin: 0;
-  background: gainsboro;
+  color: #444;
+  background: #fafafa;
+  font-family: sans-serif;
 }
 .wrapper {
   width: 800px;
@@ -17,25 +19,43 @@ body {
 }
 .col {
   padding: 0 20px;
-}
-.col.md-3 {
-  flex-basis: 33.333333%;
   box-sizing: border-box;
 }
+.md-3 {
+  flex-basis: 33.333333%;
+}
+.md-2 {
+  flex-basis: 50%;
+}
 .input-group {
+  margin-bottom: 40px;
+  max-width: 250px;
 }
 .input-group__label {
   display: block;
+  margin-bottom: 5px;
+  font-size: 12px;
+  line-height: 15px;
+  opacity: .5;
 }
 .input-group__number {
   display: block;
   width: 100%;
+  margin: 0 -10px 10px;
+  padding: 0 10px;
+  font-size: 20px;
+  line-height: 40px;
   background: transparent;
+  border-radius: 5px;
   border: none;
+  transition: .3s ease;
 }
-.input-group__range {
-  display: block;
-  width: 100%;
+.input-group__number:hover {
+  background: #ececec;
+}
+.input-group__number:focus {
+  color: #00b454;
+  background: transparent;
 }
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
@@ -44,4 +64,18 @@ input::-webkit-inner-spin-button {
 }
 input[type='number'] {
   -moz-appearance:textfield;
+}
+.input-group__range {
+  display: block;
+  width: 100%;
+  margin: 0;
+}
+.input-group__text {
+  font-size: 20px;
+  line-height: 30px;
+  margin-bottom: 15px;
+}
+.input-group__text--big {
+  font-size: 40px;
+  line-height: 50px;
 }

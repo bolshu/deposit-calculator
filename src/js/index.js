@@ -1,15 +1,18 @@
 require('../scss/styles.scss');
 
-'use strict'
+'use strict';
 
 const cashNumber = document.getElementById('cash-number');
-const cashRange = document.getElementById('cash-range');
-
 const percentNumber = document.getElementById('percent-number');
-const percentRange = document.getElementById('percent-range');
-
 const monthNumber = document.getElementById('month-number');
-const monthRange = document.getElementById('month-range');
+const refillNumber = document.getElementById('refill-number');
+
+const profitPercent = document.getElementById('profit-percent');
+const profitCash = document.getElementById('profit-cash');
+const profitSum = document.getElementById('profit-sum');
+
+const numbersCollection = document.querySelectorAll('input[type="number"]');
+const rangeCollection = document.querySelectorAll('input[type="range"]');
 
 const inputValue = {
     rangeHandler : function () {
@@ -18,95 +21,45 @@ const inputValue = {
     numberHandler : function () {
         this.nextElementSibling.value = this.value;
     },
-    cashLimit : function () {
-        if (this.value < 30000) {
-            this.value = 30000;
+    valueLimit : function () {
+        let minVal = this.getAttribute('min');
+        let maxVal = this.getAttribute('max');
+        if (this.value < +minVal) {
+            this.value = +minVal;
         }
-        if (this.value > 500000) {
-            this.value = 500000;
+        if (this.value > +maxVal) {
+            this.value = +maxVal;
         }
-    },
-    percentLimit : function () {
-        if (this.value < 0.1) {
-            this.value = 0.1;
-        }
-        if (this.value > 15) {
-            this.value = 15;
-        }
-    },
-    monthLimit : function () {
-        if (this.value < 3) {
-            this.value = 3;
-        }
-        if (this.value > 24) {
-            this.value = 24;
-        }
-    },
-    minValue : function () {
-        if (this.value.length >= 1) {
-            this.value = 0;
-            this.nextElementSibling.value = 0;
-        }
-    },
-    tempLimit : function (val, min, max) {
-        if (val < min) {
-            val = min;
-        } else if (val > max) {
-            val = max;
-        }
-        console.log(val, min, max)
     }
 };
 
-// эта функция с параметрами не работает
-function inputLimit(val, min, max) {
-    if (val < min) {
-        val  = min;
-        return val;
-    } else if (val > max) {
-        val = max;
-        return val;
-    }
+function calculateTotalSum() {
+    let calcProfitCash = (cashNumber.value * (percentNumber.value / 100) / 12) * monthNumber.value,
+        calcProfitPercent = calcProfitCash * 100 / cashNumber.value,
+        calcProfitTotal = (+calcProfitCash + +cashNumber.value).toFixed(0)
+        // ,
+        // calcRefillCash;
+        // for (let i = 0; i < monthNumber.value; i++) {
+        //     return calcRefillCash = refillNumber.value * i;
+        // }
+    profitPercent.innerHTML = calcProfitPercent.toFixed(2);
+    profitCash.innerHTML = calcProfitCash.toFixed(0).replace(/(\d)(?=(\d\d\d)+([^\d]|$))/g, '$1\&nbsp\;');
+    profitSum.innerHTML = calcProfitTotal.replace(/(\d)(?=(\d\d\d)+([^\d]|$))/g, '$1\&nbsp\;');
 }
 
-const cashLimit = {
-    inputValue: cashNumber.value,
-    minValue: 30000,
-    maxValue: 500000,
-    inputLimit: inputLimit
-};
+calculateTotalSum();
 
-const percentLimit = {
-    minValue: .01,
-    maxValue: 15,
-    inputLimit: inputLimit
-};
+for (let i = 0; i < rangeCollection.length; i++) {
+    rangeCollection[i].addEventListener('input', inputValue.rangeHandler);
+    rangeCollection[i].addEventListener('input', calculateTotalSum);
+}
 
-const monthLimit = {
-    minValue: 3,
-    maxValue: 24,
-    inputLimit: inputLimit
-};
-
-// cashNumber.addEventListener('keyup', function(){
-//     let currentInputValue = this.value;
-//     inputValue.tempLimit(currentInputValue, 30000, 500000);
-//     console.log(inputValue.tempLimit, currentInputValue);
-// });
-
-// cashNumber.addEventListener('keyup', function () {
-//     inputValue.tempLimit(cashNumber.value, 30000, 500000);
-// });
-
-cashNumber.addEventListener('input', inputValue.numberHandler);
-cashNumber.addEventListener('change', inputValue.cashLimit);
-cashNumber.addEventListener('keyup', inputValue.minValue);
-cashRange.addEventListener('input', inputValue.rangeHandler);
-
-percentNumber.addEventListener('input', inputValue.numberHandler);
-percentNumber.addEventListener('keyup', inputValue.percentLimit);
-percentRange.addEventListener('input', inputValue.rangeHandler);
-
-monthNumber.addEventListener('input', inputValue.numberHandler);
-monthNumber.addEventListener('keyup', inputValue.monthLimit);
-monthRange.addEventListener('input', inputValue.rangeHandler);
+for (let i = 0; i < numbersCollection.length; i++) {
+    numbersCollection[i].addEventListener('change', inputValue.valueLimit);
+    numbersCollection[i].addEventListener('change', inputValue.numberHandler);
+    numbersCollection[i].addEventListener('change', calculateTotalSum);
+    numbersCollection[i].addEventListener('change', function() {
+        let val = this.value.toString();
+        this.innerHTML = val.replace(/(\d)(?=(\d\d\d)+([^\d]|$))/g, '$1\&nbsp\;');
+    });
+}
