@@ -9,10 +9,10 @@ const refillRange = document.getElementById('refill-range');
 
 const refillCheckbox = document.getElementById('refill-checkbox');
 
-const profitPercent = document.getElementById('profit-percent');
 const profitCash = document.getElementById('profit-cash');
-const profitSum = document.getElementById('profit-sum');
+const profitPercent = document.getElementById('profit-percent');
 const profitMonth = document.getElementById('profit-month');
+const profitSum = document.getElementById('profit-sum');
 
 const numbersCollection = document.querySelectorAll('input[type="number"]');
 const rangeCollection = document.querySelectorAll('input[type="range"]');
@@ -47,20 +47,22 @@ const inputValue = {
     }
 };
 
-function calculateTotalSum() {
+const calculateTotalSum = () => {
     let calcProfitCash,
         calcProfitPercent,
         calcProfitTotal,
-        monthValue = +monthRange.value,
-        refillValue = +refillRange.value,
         cashValue = +cashRange.value ,
         percentValue = (+percentRange.value / 100) / 12,
+        monthValue = +monthRange.value,
+        refillValue = +refillRange.value,
         cash = cashValue,
-        calculateTotal = () => {return cash - cashValue;};
+        calculateTotal = () => {
+            return cash - cashValue
+        };
 
     if (refillCheckbox.checked) {
         for (let i = 0; i < monthValue; i++) {
-            cash += +refillValue + cash * percentValue;
+            cash += refillValue + cash * percentValue;
         }
     } else {
         for (let i = 0; i < monthValue; i++) {
@@ -69,8 +71,8 @@ function calculateTotalSum() {
     }
 
     calcProfitCash = calculateTotal();
-    calcProfitPercent = calcProfitCash * 100 / cashRange.value;
-    calcProfitTotal = (+calcProfitCash + +cashRange.value).toFixed(0);
+    calcProfitPercent = calcProfitCash * 100 / cashValue;
+    calcProfitTotal = (calcProfitCash + cashValue).toFixed(0);
 
     profitPercent.innerHTML = calcProfitPercent.toFixed(2).replace(valueTemplate, '$1 ').replace('.', ',');
     profitCash.innerHTML = calcProfitCash.toFixed(0).replace(valueTemplate, '$1 ');
@@ -83,11 +85,10 @@ function calculateTotalSum() {
     } else {
         profitMonth.innerHTML = monthValue + ' месяцев';
     }
-}
-
-calculateTotalSum();
+};
 
 document.addEventListener('DOMContentLoaded', function() {
+    calculateTotalSum();
     for (let i = 0; i < numbersCollection.length; i++) {
         numbersCollection[i].setAttribute('type', 'text');
         numbersCollection[i].value = numbersCollection[i].value.replace(valueTemplate, '$1 ').replace('.', ',');
@@ -102,9 +103,9 @@ for (let i = 0; i < rangeCollection.length; i++) {
 for (let i = 0; i < numbersCollection.length; i++) {
     numbersCollection[i].addEventListener('change', inputValue.numberHandler);
     numbersCollection[i].addEventListener('change', inputValue.valueLimit);
-    numbersCollection[i].addEventListener('change', calculateTotalSum);
     numbersCollection[i].addEventListener('blur', inputValue.numberToString);
     numbersCollection[i].addEventListener('focus', inputValue.stringToNumber);
+    numbersCollection[i].addEventListener('change', calculateTotalSum);
 }
 
 refillCheckbox.addEventListener('change', calculateTotalSum);
